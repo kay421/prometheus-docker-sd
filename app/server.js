@@ -28,7 +28,7 @@ function convertDockerJson2Prometheus(data){
         logger.info('Container "' + containerName + '" is enabled for prometheus.');
 
         if("prometheus-scrape.job_name" in data.Config.Labels) {
-          container.labels["job"] = data.Config.Labels["prometheus-scrape.job_name"]; 
+          container.labels["job"] = data.Config.Labels["prometheus-scrape.job_name"];
           logger.info('Set job name to "' + container.labels["job"] + '".');
         }
 
@@ -53,12 +53,12 @@ function convertDockerJson2Prometheus(data){
         logger.info('Add scrape target "' + target + '".');
 
         if("prometheus-scrape.scheme" in data.Config.Labels) {
-          container.labels["__scheme__"] = data.Config.Labels["prometheus-scrape.scheme"]; 
+          container.labels["__scheme__"] = data.Config.Labels["prometheus-scrape.scheme"];
           logger.info('Set scheme to "' + container.labels["__scheme__"] + '".');
         }
 
         //if("prometheus-scrape.scrape_interval" in data.Config.Labels) {
-        //  container.scrape_interval = data.Config.Labels["prometheus-scrape.scrape_interval"]; 
+        //  container.scrape_interval = data.Config.Labels["prometheus-scrape.scrape_interval"];
         //  logger.info('Set scrape interval to "' + container.scrape_interval + '".');
         //}
 
@@ -70,6 +70,12 @@ function convertDockerJson2Prometheus(data){
         if("com.docker.compose.service" in data.Config.Labels) {
           container.labels["com_docker_compose_service"] = data.Config.Labels["com.docker.compose.service"];
           logger.info('Set compose service name to "' + container.labels["com_docker_compose_service"] + '".');
+        }
+
+        for (label of data.Config.Labels) {
+          if (label.startsWith("prometheus-scrape") continue;
+          if (label.startsWith("com.docker.compose.service") continue;
+          container.labels[label] = label
         }
 
         logger.info('');
